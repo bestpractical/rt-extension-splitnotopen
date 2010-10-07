@@ -1,0 +1,30 @@
+RT-Extension-SplitNotOpen
+
+INSTALLATION
+
+Read INSTALL file to get more info about installation.
+
+COPYRIGHT AND LICENCE
+
+Copyright (C) 2006-2010, Best Practical Solutions LLC.
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.
+
+DESCRIPTION
+
+
+Add the following to your RT config file:
+
+Set($StrictLinkACL, 0);
+
+@MailPlugins = qw(Auth::MailFrom Filter::SplitNotOpen);
+
+
+Add the following lines to your autoreply message:
+
+
+If this message is in reply to a previously submitted ticket, it's 
+possible that ticket has been marked as closed. As we review this ticket,
+we will also review previous correspondence and take apropriate action.
+
