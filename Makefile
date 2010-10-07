@@ -11,17 +11,23 @@
 
 #   MakeMaker Parameters:
 
-#     ABSTRACT => q[RT Extension-SplitNotOpen Extension]
+#     ABSTRACT => q[When someone replies to a resolved ticket, create a new one]
 #     AUTHOR => q[Jesse Vincent <jesse@bestpractical.com>]
 #     BUILD_REQUIRES => {  }
-#     DIR => []
 #     DISTNAME => q[RT-Extension-SplitNotOpen]
-#     INSTALLSITELIB => q[/opt/rt3/local/lib]
+#     INSTALLARCHLIB => q[/opt/rt3/local/plugins/RT-Extension-SplitNotOpen/lib]
+#     INSTALLSITEARCH => q[/opt/rt3/local/man]
+#     INSTALLSITELIB => q[/opt/rt3/local/plugins/RT-Extension-SplitNotOpen/lib]
+#     INSTALLSITEMAN1DIR => q[/opt/rt3/local/man/man1]
+#     INSTALLSITEMAN3DIR => q[/opt/rt3/local/man/man3]
+#     LICENSE => q[gplv2]
 #     NAME => q[RT::Extension::SplitNotOpen]
 #     NO_META => q[1]
-#     PL_FILES => {  }
-#     PREREQ_PM => { Test::More=>q[0], MIME::Entity=>q[5.420], IPC::Open2=>q[0], UNIVERSAL::require=>q[0] }
+#     PREREQ_PM => { Test::More=>q[0], MIME::Entity=>q[5.420], ExtUtils::MakeMaker=>q[6.42], IPC::Open2=>q[0], UNIVERSAL::require=>q[0] }
 #     VERSION => q[0.05]
+#     VERSION_FROM => q[lib/RT/Extension/SplitNotOpen.pm]
+#     dist => { PREOP=>q[$(PERL) -I. "-MModule::Install::Admin" -e "dist_preop(q($(DISTVNAME)))"] }
+#     realclean => { FILES=>q[MYMETA.yml] }
 #     test => { TESTS=>q[] }
 
 # --- MakeMaker post_initialize section:
@@ -84,13 +90,13 @@ SITEPREFIX = $(PREFIX)/local
 VENDORPREFIX = $(PREFIX)
 INSTALLPRIVLIB = $(PERLPREFIX)/share/perl/5.10
 DESTINSTALLPRIVLIB = $(DESTDIR)$(INSTALLPRIVLIB)
-INSTALLSITELIB = /opt/rt3/local/lib
+INSTALLSITELIB = /opt/rt3/local/plugins/RT-Extension-SplitNotOpen/lib
 DESTINSTALLSITELIB = $(DESTDIR)$(INSTALLSITELIB)
 INSTALLVENDORLIB = $(VENDORPREFIX)/share/perl5
 DESTINSTALLVENDORLIB = $(DESTDIR)$(INSTALLVENDORLIB)
-INSTALLARCHLIB = $(PERLPREFIX)/lib/perl/5.10
+INSTALLARCHLIB = /opt/rt3/local/plugins/RT-Extension-SplitNotOpen/lib
 DESTINSTALLARCHLIB = $(DESTDIR)$(INSTALLARCHLIB)
-INSTALLSITEARCH = /usr/local/lib/perl/5.10.1
+INSTALLSITEARCH = /opt/rt3/local/man
 DESTINSTALLSITEARCH = $(DESTDIR)$(INSTALLSITEARCH)
 INSTALLVENDORARCH = $(VENDORPREFIX)/lib/perl5
 DESTINSTALLVENDORARCH = $(DESTDIR)$(INSTALLVENDORARCH)
@@ -108,13 +114,13 @@ INSTALLVENDORSCRIPT = $(VENDORPREFIX)/bin
 DESTINSTALLVENDORSCRIPT = $(DESTDIR)$(INSTALLVENDORSCRIPT)
 INSTALLMAN1DIR = $(PERLPREFIX)/share/man/man1
 DESTINSTALLMAN1DIR = $(DESTDIR)$(INSTALLMAN1DIR)
-INSTALLSITEMAN1DIR = $(SITEPREFIX)/man/man1
+INSTALLSITEMAN1DIR = /opt/rt3/local/man/man1
 DESTINSTALLSITEMAN1DIR = $(DESTDIR)$(INSTALLSITEMAN1DIR)
 INSTALLVENDORMAN1DIR = $(VENDORPREFIX)/share/man/man1
 DESTINSTALLVENDORMAN1DIR = $(DESTDIR)$(INSTALLVENDORMAN1DIR)
 INSTALLMAN3DIR = $(PERLPREFIX)/share/man/man3
 DESTINSTALLMAN3DIR = $(DESTDIR)$(INSTALLMAN3DIR)
-INSTALLSITEMAN3DIR = $(SITEPREFIX)/man/man3
+INSTALLSITEMAN3DIR = /opt/rt3/local/man/man3
 DESTINSTALLSITEMAN3DIR = $(DESTDIR)$(INSTALLSITEMAN3DIR)
 INSTALLVENDORMAN3DIR = $(VENDORPREFIX)/share/man/man3
 DESTINSTALLVENDORMAN3DIR = $(DESTDIR)$(INSTALLVENDORMAN3DIR)
@@ -153,7 +159,7 @@ FULLEXT = RT/Extension/SplitNotOpen
 BASEEXT = SplitNotOpen
 PARENT_NAME = RT::Extension
 DLBASE = $(BASEEXT)
-VERSION_FROM = 
+VERSION_FROM = lib/RT/Extension/SplitNotOpen.pm
 OBJECT = 
 LDFROM = $(OBJECT)
 LINKTYPE = dynamic
@@ -255,7 +261,7 @@ ZIPFLAGS = -r
 COMPRESS = gzip --best
 SUFFIX = .gz
 SHAR = shar
-PREOP = $(NOECHO) $(NOOP)
+PREOP = $(PERL) -I. "-MModule::Install::Admin" -e "dist_preop(q($(DISTVNAME)))"
 POSTOP = $(NOECHO) $(NOOP)
 TO_UNIX = $(NOECHO) $(NOOP)
 CI = ci -u
@@ -478,7 +484,7 @@ realclean purge ::  clean realclean_subdirs
 	- $(RM_F) \
 	  $(MAKEFILE_OLD) $(FIRST_MAKEFILE) 
 	- $(RM_RF) \
-	  $(DISTVNAME) 
+	  MYMETA.yml $(DISTVNAME) 
 
 
 # --- MakeMaker metafile section:
@@ -751,9 +757,10 @@ testdb_static :: testdb_dynamic
 # Creates a PPD (Perl Package Description) for a binary distribution.
 ppd :
 	$(NOECHO) $(ECHO) '<SOFTPKG NAME="$(DISTNAME)" VERSION="0.05">' > $(DISTNAME).ppd
-	$(NOECHO) $(ECHO) '    <ABSTRACT>RT Extension-SplitNotOpen Extension</ABSTRACT>' >> $(DISTNAME).ppd
+	$(NOECHO) $(ECHO) '    <ABSTRACT>When someone replies to a resolved ticket, create a new one</ABSTRACT>' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '    <AUTHOR>Jesse Vincent &lt;jesse@bestpractical.com&gt;</AUTHOR>' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '    <IMPLEMENTATION>' >> $(DISTNAME).ppd
+	$(NOECHO) $(ECHO) '        <REQUIRE NAME="ExtUtils::MakeMaker" VERSION="6.42" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <REQUIRE NAME="IPC::Open2" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <REQUIRE NAME="MIME::Entity" VERSION="5.42" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Test::More" />' >> $(DISTNAME).ppd
@@ -780,9 +787,28 @@ pm_to_blib : $(FIRST_MAKEFILE) $(TO_INST_PM)
 
 
 # End.
-# Postamble by Module::Install 0.63
+# Postamble by Module::Install 1.00
+# --- Module::Install::Admin::Makefile section:
+
+realclean purge ::
+	$(RM_F) $(DISTVNAME).tar$(SUFFIX)
+	$(RM_F) MANIFEST.bak _build
+	$(PERL) "-Ilib" "-MModule::Install::Admin" -e "remove_meta()"
+	$(RM_RF) inc
+
+reset :: purge
+
+upload :: test dist
+	cpan-upload -verbose $(DISTVNAME).tar$(SUFFIX)
+
+grok ::
+	perldoc Module::Install
+
+distsign ::
+	cpansign -s
+
 install ::
-	$(NOECHO) $(PERL) -MExtUtils::Install -e "install({})"
+	$(NOECHO) $(PERL) -MExtUtils::Install -e "install({q(lib), q(/opt/rt3/local/plugins/RT-Extension-SplitNotOpen/lib)})"
 
 # --- Module::Install::AutoInstall section:
 
